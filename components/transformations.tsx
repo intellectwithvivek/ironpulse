@@ -1,6 +1,6 @@
-import NextImage from 'next/image'
 import { Badge, Card, Carousel, Heading, Text } from '@the_viveksingh/vivek-ui'
 import { TRANSFORMATIONS } from '@/data/gym'
+import { Photo } from './photo'
 
 /**
  * Before / after pairs.
@@ -24,7 +24,7 @@ export function Transformations() {
         <Card key={item.id} variant="outline" padding="none">
           <div className="ip-transform">
             <div className="ip-transform__half" data-when="before">
-              <NextImage
+              <Photo
                 src={item.before}
                 alt={`${item.name} at the start of their ${item.weeks}-week block`}
                 width={640}
@@ -34,7 +34,7 @@ export function Transformations() {
               <span className="ip-transform__tag">Week 0</span>
             </div>
             <div className="ip-transform__half" data-when="after">
-              <NextImage
+              <Photo
                 src={item.after}
                 alt={`${item.name} after ${item.weeks} weeks of training at IronPulse`}
                 width={640}

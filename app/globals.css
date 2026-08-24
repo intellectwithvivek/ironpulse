@@ -303,6 +303,10 @@
   position: absolute;
   inset: 0;
   z-index: -2;
+  /* Painted before the photograph arrives, and left showing if it never does.
+     Without it a slow fetch flashes the page background through the scrim,
+     which on a light-theme first paint is a white band behind white type. */
+  background: #0d0d10;
 }
 
 :where(.ip-hero__media) :where(img) {
@@ -530,6 +534,46 @@
   margin: 0;
   padding: 0;
   list-style: none;
+}
+
+/* --- Photo fallback -----------------------------------------------------
+   What replaces a photograph the browser could not fetch. See components/
+   photo.tsx for why this exists at all. It has to look like a decision, so:
+   house surface, a centred glyph at low contrast, no borders of its own —
+   whatever wrapper it lands in already supplies the shape and the radius.
+   ---------------------------------------------------------------------- */
+:where(.ip-photo-fallback) {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  background:
+    linear-gradient(
+      135deg,
+      var(--vk-color-surface-subtle) 0%,
+      var(--vk-color-surface) 100%
+    );
+  color: var(--vk-color-primary);
+}
+
+:where(.ip-photo-fallback--fill) {
+  position: absolute;
+  inset: 0;
+}
+
+/* No glyph on a full-bleed fallback. Behind a hero's headline an isolated
+   dumbbell floating mid-screen reads as an artefact; a plain dark panel reads
+   as art direction. The card-sized fallbacks keep theirs, where an empty
+   rectangle would just look unfinished. */
+:where(.ip-photo-fallback--fill) > :where(svg) {
+  display: none;
+}
+
+:where(.ip-photo-fallback) > :where(svg) {
+  width: clamp(2rem, 12%, 4rem);
+  height: auto;
+  opacity: 0.4;
 }
 
 /* --- Media cards -------------------------------------------------------- */

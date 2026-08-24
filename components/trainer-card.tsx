@@ -1,5 +1,5 @@
-import NextImage from 'next/image'
 import { Badge, Button, Card, Heading, Text } from '@the_viveksingh/vivek-ui'
+import { Photo } from './photo'
 import type { Trainer } from '@/data/trainers'
 import { InstagramIcon, MailIcon, XIcon } from './icons'
 
@@ -37,21 +37,25 @@ export function TrainerCard({
   trainer,
   headingLevel = 2,
   compact = false,
+  priority = false,
 }: {
   trainer: Trainer
   headingLevel?: 2 | 3
   /** Drops the bio, for the denser grid on the homepage. */
   compact?: boolean
+  /** Set on the first card of a grid that sits above the fold — it is the LCP. */
+  priority?: boolean
 }) {
   return (
     <Card variant="outline" padding="none" className="ip-trainer">
       <div className="ip-media ip-media--trainer">
-        <NextImage
+        <Photo
           src={trainer.photo}
           alt={`${trainer.name}, ${trainer.role.toLowerCase()} at IronPulse`}
           width={800}
           height={1000}
           sizes="(max-width: 48rem) 90vw, (max-width: 75rem) 45vw, 22vw"
+          priority={priority}
         />
       </div>
 

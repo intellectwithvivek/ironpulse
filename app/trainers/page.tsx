@@ -51,8 +51,13 @@ export default function TrainersPage() {
             gridTemplateColumns: 'repeat(auto-fit, minmax(17rem, 1fr))',
           }}
         >
-          {TRAINERS.map((trainer) => (
-            <TrainerCard key={trainer.id} trainer={trainer} headingLevel={2} />
+          {TRAINERS.map((trainer, index) => (
+            <TrainerCard
+              key={trainer.id}
+              trainer={trainer}
+              headingLevel={2}
+              priority={index === 0}
+            />
           ))}
         </div>
 

@@ -2,8 +2,8 @@
 
 import { useMemo, useState } from 'react'
 import Link from 'next/link'
-import NextImage from 'next/image'
 import { useRouter } from 'next/navigation'
+import { Photo } from './photo'
 import {
   Badge,
   Button,
@@ -108,7 +108,7 @@ export function ClassGrid({ initialType = 'all' }: { initialType?: string }) {
             gridTemplateColumns: 'repeat(auto-fit, minmax(19rem, 1fr))',
           }}
         >
-          {shown.map((gymClass) => (
+          {shown.map((gymClass, index) => (
             <Card
               key={gymClass.slug}
               id={`class-${gymClass.slug}`}
@@ -117,12 +117,16 @@ export function ClassGrid({ initialType = 'all' }: { initialType?: string }) {
               className="ip-anchor"
             >
               <div className="ip-media ip-media--class">
-                <NextImage
+                <Photo
                   src={gymClass.image}
                   alt={`A ${gymClass.name.toLowerCase()} session in progress at IronPulse`}
                   width={1200}
                   height={750}
                   sizes="(max-width: 48rem) 92vw, (max-width: 75rem) 45vw, 30vw"
+                  /* The first card is the largest thing above the fold here, so
+                     it is the LCP element. Lazy-loading it delays the fetch
+                     until layout proves it visible, which is measurably slower. */
+                  priority={index === 0}
                 />
               </div>
 

@@ -208,6 +208,29 @@ A few decisions worth knowing before you edit.
   with the reason: the charts' visually-hidden data table, long inline code
   tokens, and the clone command. All three would otherwise widen the page below
   390px.
+- **Images fail gracefully.** Every photograph is hotlinked, so three things
+  outside this repo can break one: the host can rate-limit, a network can block
+  it, and the optimizer's own fetch can time out. `next/image` has no fallback,
+  so all three end in the browser's broken-image icon with alt text sprawled
+  across the layout. [`components/photo.tsx`](components/photo.tsx) wraps it and
+  renders a deliberate panel instead, keeping the alt text in the accessibility
+  tree via `role="img"`.
+- **The hero photograph skips the optimizer** (`unoptimized`). Unsplash is
+  already an image CDN — `w=` resizes and `auto=format` negotiates AVIF/WebP —
+  so proxying it through Next as well was measured at **~4.7s** for the first
+  cold request versus **0.87s and 143 KB of AVIF** fetched directly. It is the
+  `priority` LCP element, so those seconds land on first paint, and a request
+  that slow is also the one most likely to time out. The card photographs keep
+  the optimizer, where a real `srcset` saves a phone from a desktop-sized
+  download. `deviceSizes` is capped at 2048 for the same reason: at 3840 the
+  optimizer was being asked to upscale.
+
+### Using your own images
+
+Swap the URLs in `data/classes.ts`, `data/trainers.ts` and `data/gym.ts`. To
+self-host instead, drop files in `public/` and use root-relative paths — then
+`next.config.ts`'s `remotePatterns` can go entirely, and the site works with no
+third-party image host at all.
 
 ## Accessibility
 

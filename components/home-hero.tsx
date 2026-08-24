@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import NextImage from 'next/image'
+import { Photo } from '@/components/photo'
 import { Badge, Button, Container, Countdown, Stack, Text } from '@the_viveksingh/vivek-ui'
 import { formatChallengeDate, nextChallengeStart } from '@/lib/schedule'
 
@@ -17,11 +17,32 @@ export function HomeHero() {
   return (
     <section className="ip-hero" aria-labelledby="hero-title">
       <div className="ip-hero__media">
-        <NextImage
-          src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=2000&q=75"
+        {/*
+          `unoptimized` on this one image, deliberately.
+
+          Unsplash is itself an image CDN: `w=` does the resizing and
+          `auto=format` negotiates WebP/AVIF per browser, so this URL already
+          arrives correctly sized and in a modern format. Proxying it through
+          Next's optimizer as well repeats that work — measured at ~4.7s for the
+          first cold request on this source, because sharp has to fetch, decode,
+          resize and re-encode a multi-megapixel photograph. This is the
+          `priority` LCP element, so those seconds land squarely on first paint,
+          and a request that slow is also the one most likely to time out and
+          leave a broken image behind. On Vercel it additionally burns an
+          image-optimization invocation per size, which matters on a free plan.
+
+          The trade is the responsive `srcset`, and for a full-bleed decorative
+          backdrop that is genuinely 100vw wide, desaturated and covered by a
+          gradient scrim, one 1920px file is the right answer at every width.
+          The card photographs below keep the optimizer, where a real srcset
+          saves a phone from downloading a desktop-sized image.
+        */}
+        <Photo
+          src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=1920&q=70"
           alt="A dimly lit weights floor, racks loaded and chalk dust in the air"
           fill
           priority
+          unoptimized
           sizes="100vw"
         />
       </div>
