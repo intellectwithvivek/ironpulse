@@ -27,8 +27,8 @@ export function Transformations() {
               <Photo
                 src={item.before}
                 alt={`${item.name} at the start of their ${item.weeks}-week block`}
-                width={640}
-                height={800}
+                width={480}
+                height={600}
                 sizes="(max-width: 48rem) 45vw, 20vw"
               />
               <span className="ip-transform__tag">Week 0</span>
@@ -37,8 +37,8 @@ export function Transformations() {
               <Photo
                 src={item.after}
                 alt={`${item.name} after ${item.weeks} weeks of training at IronPulse`}
-                width={640}
-                height={800}
+                width={480}
+                height={600}
                 sizes="(max-width: 48rem) 45vw, 20vw"
               />
               <span className="ip-transform__tag">Week {item.weeks}</span>

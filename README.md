@@ -126,6 +126,7 @@ app/
   globals.css           the entire design layer (VivekUI token overrides)
 components/             composed sections — no UI primitives of its own
 data/                   all content, as typed modules
+public/images/          every photograph, shipped with the repo
 lib/
   schedule.ts           the recurring-week → Scheduler projection
   theme-script.ts       server-safe anti-flash theme script
@@ -208,29 +209,46 @@ A few decisions worth knowing before you edit.
   with the reason: the charts' visually-hidden data table, long inline code
   tokens, and the clone command. All three would otherwise widen the page below
   390px.
-- **Images fail gracefully.** Every photograph is hotlinked, so three things
-  outside this repo can break one: the host can rate-limit, a network can block
-  it, and the optimizer's own fetch can time out. `next/image` has no fallback,
-  so all three end in the browser's broken-image icon with alt text sprawled
-  across the layout. [`components/photo.tsx`](components/photo.tsx) wraps it and
-  renders a deliberate panel instead, keeping the alt text in the accessibility
-  tree via `role="img"`.
-- **The hero photograph skips the optimizer** (`unoptimized`). Unsplash is
-  already an image CDN — `w=` resizes and `auto=format` negotiates AVIF/WebP —
-  so proxying it through Next as well was measured at **~4.7s** for the first
-  cold request versus **0.87s and 143 KB of AVIF** fetched directly. It is the
-  `priority` LCP element, so those seconds land on first paint, and a request
-  that slow is also the one most likely to time out. The card photographs keep
-  the optimizer, where a real `srcset` saves a phone from a desktop-sized
-  download. `deviceSizes` is capped at 2048 for the same reason: at 3840 the
-  optimizer was being asked to upscale.
+- **The photographs ship with the repo.** They used to be hotlinked from
+  Unsplash, Picsum and Pravatar, which put four things outside this repo between
+  a visitor and a rendered page: the host can rate-limit, a network or region can
+  block it, an image id can be withdrawn, and Next's optimizer has to make a
+  server-side fetch before it can serve anything — measured at **~5s cold** for
+  the hero, which is the LCP element. In practice the site rendered with missing
+  photographs for anyone whose route to those hosts was slow or filtered.
+
+  A template gets cloned by strangers on networks nobody can predict, so the
+  images now live in [`public/images`](public/images): **948 KB** total, each one
+  cropped to the ratio it is displayed at and converted to AVIF where the source
+  offered it. Serving them locally also made the optimizer **11× faster** —
+  0.46s cold against 5.2s — because there is no upstream fetch left to make.
+  `next.config.ts` needs no `remotePatterns` at all, and the site works offline.
+- **Images still fail gracefully.** `next/image` has no fallback of its own, so a
+  404 or a blocked request ends in the browser's broken-image icon with the alt
+  text sprawled across the layout. [`components/photo.tsx`](components/photo.tsx)
+  wraps it and renders a deliberate panel instead, keeping the alt text in the
+  accessibility tree via `role="img"`.
+- **Ratio boxes position their image absolutely.** `aspect-ratio` on a wrapper
+  only wins while nothing in flow insists otherwise, and an `<img>` with
+  `height: 100%` against an indefinite parent resolves to `auto` — so a portrait
+  photograph stretched its card to its own ratio and a row of cards came out
+  ragged at 247px, 262px and 589px. Taking the image out of flow makes the ratio
+  the only thing deciding the height, whatever the source turns out to be.
+- **Nested page sections are transparent.** `FeatureGrid`, `Pricing`,
+  `Testimonials` and `FAQ` are each a `Section`, so each paints a background.
+  Composed inside one of this site's own Sections they are content, not a
+  surface — and a default-background child inside a `background="muted"` parent
+  rendered as an unexplained white panel with its contents flush to the edges.
 
 ### Using your own images
 
-Swap the URLs in `data/classes.ts`, `data/trainers.ts` and `data/gym.ts`. To
-self-host instead, drop files in `public/` and use root-relative paths — then
-`next.config.ts`'s `remotePatterns` can go entirely, and the site works with no
-third-party image host at all.
+Replace the files in [`public/images`](public/images) and keep the paths, or
+point [`data/classes.ts`](data/classes.ts),
+[`data/trainers.ts`](data/trainers.ts) and [`data/gym.ts`](data/gym.ts) at your
+own. If you move them to a CDN, add that host to `images.remotePatterns` in
+`next.config.ts` — it is currently empty because nothing remote is needed.
+[`public/images/CREDITS.md`](public/images/CREDITS.md) records where each
+photograph came from and its licence.
 
 ## Accessibility
 

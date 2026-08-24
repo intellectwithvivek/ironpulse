@@ -120,8 +120,8 @@ export function ClassGrid({ initialType = 'all' }: { initialType?: string }) {
                 <Photo
                   src={gymClass.image}
                   alt={`A ${gymClass.name.toLowerCase()} session in progress at IronPulse`}
-                  width={1200}
-                  height={750}
+                  width={900}
+                  height={563}
                   sizes="(max-width: 48rem) 92vw, (max-width: 75rem) 45vw, 30vw"
                   /* The first card is the largest thing above the fold here, so
                      it is the LCP element. Lazy-loading it delays the fetch
