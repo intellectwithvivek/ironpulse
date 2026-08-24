@@ -56,7 +56,7 @@ export default async function ClassesPage(props: PageProps<'/classes'>) {
         }
       />
 
-      <Section size="xl" padding="lg">
+      <Section size="xl" padding="md">
         <ClassGrid initialType={initialType} />
       </Section>
     </>

@@ -52,8 +52,8 @@ export function TrainerCard({
         <Photo
           src={trainer.photo}
           alt={`${trainer.name}, ${trainer.role.toLowerCase()} at IronPulse`}
-          width={800}
-          height={1000}
+          width={600}
+          height={750}
           sizes="(max-width: 48rem) 90vw, (max-width: 75rem) 45vw, 22vw"
           priority={priority}
         />

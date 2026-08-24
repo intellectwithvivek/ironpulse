@@ -43,7 +43,7 @@ export const CLASSES: GymClass[] = [
     trainerId: 'rhea',
     bring: 'Flat shoes. Belt optional and not encouraged early on.',
     image:
-      'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=1200&q=75',
+      '/images/classes/strength.avif',
   },
   {
     slug: 'hiit',
@@ -56,7 +56,7 @@ export const CLASSES: GymClass[] = [
     trainerId: 'darius',
     bring: 'A towel and more water than you think you need.',
     image:
-      'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=1200&q=75',
+      '/images/classes/hiit.avif',
   },
   {
     slug: 'yoga',
@@ -69,7 +69,7 @@ export const CLASSES: GymClass[] = [
     trainerId: 'meera',
     bring: 'Nothing. Mats, blocks and straps are on the rack by the door.',
     image:
-      'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=1200&q=75',
+      '/images/classes/yoga.avif',
   },
   {
     slug: 'crossfit',
@@ -82,7 +82,7 @@ export const CLASSES: GymClass[] = [
     trainerId: 'joel',
     bring: 'No experience needed — say so at the door and you get the scaled track.',
     image:
-      'https://images.unsplash.com/photo-1526506118085-60ce8714f8c5?auto=format&fit=crop&w=1200&q=75',
+      '/images/classes/crossfit.avif',
   },
   {
     slug: 'boxing',
@@ -95,7 +95,7 @@ export const CLASSES: GymClass[] = [
     trainerId: 'darius',
     bring: 'Wraps. Gloves can be borrowed for your first month.',
     image:
-      'https://images.unsplash.com/photo-1549719386-74dfcbf7dbed?auto=format&fit=crop&w=1200&q=75',
+      '/images/classes/boxing.avif',
   },
   {
     slug: 'mobility',
@@ -108,7 +108,7 @@ export const CLASSES: GymClass[] = [
     trainerId: 'meera',
     bring: 'Long socks if you dislike the foam roller as much as we do.',
     image:
-      'https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=1200&q=75',
+      '/images/classes/mobility.avif',
   },
 ]
 

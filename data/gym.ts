@@ -50,7 +50,7 @@ export const MEMBER_STORY = {
   workoutsTarget: 5,
   quote:
     'I booked the mobility class to fill a gap in my week and it turned out to be the one I never skip.',
-  avatar: 'https://i.pravatar.cc/160?img=45',
+  avatar: '/images/members/anita.jpg',
 }
 
 export interface Transformation {
@@ -71,8 +71,8 @@ export const TRANSFORMATIONS: Transformation[] = [
     weeks: 24,
     headline: 'Deadlift 70 kg → 140 kg',
     detail: 'Two strength sessions a week, one conditioning, and a logbook he never once left at home.',
-    before: 'https://picsum.photos/seed/ironpulse-kabir-before/640/800',
-    after: 'https://picsum.photos/seed/ironpulse-kabir-after/640/800',
+    before: '/images/results/kabir-before.jpg',
+    after: '/images/results/kabir-after.jpg',
   },
   {
     id: 'shreya',
@@ -80,8 +80,8 @@ export const TRANSFORMATIONS: Transformation[] = [
     weeks: 16,
     headline: 'First unassisted pull-up',
     detail: 'Started on the bands in CrossFit, finished the block doing three in a row unbroken.',
-    before: 'https://picsum.photos/seed/ironpulse-shreya-before/640/800',
-    after: 'https://picsum.photos/seed/ironpulse-shreya-after/640/800',
+    before: '/images/results/shreya-before.jpg',
+    after: '/images/results/shreya-after.jpg',
   },
   {
     id: 'tom',
@@ -89,8 +89,8 @@ export const TRANSFORMATIONS: Transformation[] = [
     weeks: 32,
     headline: 'Back to lifting after a slipped disc',
     detail: 'Eight months of mobility first, then a rebuilt hinge pattern. Squats pain-free now.',
-    before: 'https://picsum.photos/seed/ironpulse-tom-before/640/800',
-    after: 'https://picsum.photos/seed/ironpulse-tom-after/640/800',
+    before: '/images/results/tom-before.jpg',
+    after: '/images/results/tom-after.jpg',
   },
   {
     id: 'nadia',
@@ -98,8 +98,8 @@ export const TRANSFORMATIONS: Transformation[] = [
     weeks: 20,
     headline: 'Ran her first 10 km',
     detail: 'Never used the treadmill. HIIT twice a week and the engine came anyway.',
-    before: 'https://picsum.photos/seed/ironpulse-nadia-before/640/800',
-    after: 'https://picsum.photos/seed/ironpulse-nadia-after/640/800',
+    before: '/images/results/nadia-before.jpg',
+    after: '/images/results/nadia-after.jpg',
   },
 ]
 
@@ -110,7 +110,7 @@ export const TESTIMONIALS = [
       'I had a gym membership for three years and used it eleven times. Here the timetable does the deciding for me, and I have been four times a week since March.',
     author: 'Priya Nair',
     role: 'Pro member, 14 months',
-    avatar: 'https://i.pravatar.cc/160?img=32',
+    avatar: '/images/members/priya.jpg',
   },
   {
     id: 'sam',
@@ -118,7 +118,7 @@ export const TESTIMONIALS = [
       'Walked in having never touched a barbell. Rhea spent my entire first session on the setup and nothing else. That is why I came back.',
     author: 'Sameer Qureshi',
     role: 'Basic member, 5 months',
-    avatar: 'https://i.pravatar.cc/160?img=12',
+    avatar: '/images/members/sameer.jpg',
   },
   {
     id: 'lin',
@@ -126,7 +126,7 @@ export const TESTIMONIALS = [
       'The scaled CrossFit track is written on the board before class, so I never have to ask for the easier version in front of everyone. Small thing. Huge thing.',
     author: 'Lin Chen',
     role: 'Elite member, 2 years',
-    avatar: 'https://i.pravatar.cc/160?img=27',
+    avatar: '/images/members/lin.jpg',
   },
 ]
 
