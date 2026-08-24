@@ -1,26 +1,845 @@
-@import "tailwindcss";
+/* ==========================================================================
+   IronPulse — art direction on top of VivekUI.
 
+   Two rules hold everywhere in this file:
+     1. Every selector is wrapped in :where() so it has specificity zero and a
+        consumer's own flat class always wins — the same contract the library
+        keeps with us.
+     2. No "important" overrides. Not once.
+
+   Everything visual is a VivekUI token override or a custom property, so the
+   whole look can be re-pointed from the two blocks at the top.
+   ========================================================================== */
+
+/* --- Rose accent, light --------------------------------------------------- */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --vk-color-primary: #d81e46;
+  --vk-color-primary-fg: #fff;
+  --vk-color-primary-hover: #c01a3d;
+  --vk-color-primary-active: #a71634;
+  --vk-color-primary-subtle: #ffeaef;
+  --vk-color-primary-subtle-fg: #9f1239;
+  --vk-color-ring: #d81e46;
+
+  --vk-font-sans: var(--font-body), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  /* Display face: condensed, uppercase, tight. The gym voice. */
+  --ip-display: var(--font-display), "Oswald", "Arial Narrow", ui-sans-serif, sans-serif;
+
+  --ip-scrim: linear-gradient(to top, #0a0a0bfa 4%, #0a0a0bc2 42%, #0a0a0b62 100%);
+  --ip-rep-stroke: color-mix(in oklab, var(--vk-color-fg) 26%, transparent);
+  --ip-radius: var(--vk-radius-lg);
+
+  /* Charts inherit the brand for their first series; 2–6 stay on the library's
+     colourblind-safe ramp, because a six-way rose gradient would be unreadable. */
+  --vk-chart-1: #d81e46;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* --- Rose accent, dark. The default, and what this site is designed for. --- */
+:root[data-theme="dark"] {
+  --vk-color-primary: #ff4d6d;
+  /* Solid rose is bright in dark mode, so text on it is near-black. */
+  --vk-color-primary-fg: #140308;
+  --vk-color-primary-hover: #ff7089;
+  --vk-color-primary-active: #f03356;
+  --vk-color-primary-subtle: #3a0a17;
+  --vk-color-primary-subtle-fg: #ffabbb;
+  --vk-color-ring: #ff4d6d;
+
+  --vk-color-bg: #08080a;
+  --vk-color-surface: #131317;
+  --vk-color-surface-subtle: #1b1b21;
+  --vk-color-border: #2b2b33;
+
+  --ip-rep-stroke: color-mix(in oklab, #ffffff 30%, transparent);
+  --vk-chart-1: #ff4d6d;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* --- Base ---------------------------------------------------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:where(html) {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+:where(body) {
+  margin: 0;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background: var(--vk-color-bg);
+  color: var(--vk-color-fg);
+  font-family: var(--vk-font-sans);
+  line-height: var(--vk-leading-normal);
+  -webkit-font-smoothing: antialiased;
+}
+
+:where(main) {
+  flex: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :where(html) {
+    scroll-behavior: auto;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Skip link — visible the moment it takes focus, invisible otherwise. */
+:where(.ip-skip) {
+  position: absolute;
+  inset-inline-start: var(--vk-space-4);
+  inset-block-start: var(--vk-space-2);
+  z-index: 100;
+  padding: var(--vk-space-2) var(--vk-space-4);
+  border-radius: var(--vk-radius-sm);
+  background: var(--vk-color-primary);
+  color: var(--vk-color-primary-fg);
+  font-weight: var(--vk-weight-semibold);
+  text-decoration: none;
+  transform: translateY(-250%);
+}
+
+:where(.ip-skip):focus-visible {
+  transform: translateY(0);
+}
+
+/* --- Navbar fit --------------------------------------------------------
+   Navbar.Actions deliberately stays in the bar at every width, and below the
+   navbar's own 48rem collapse point the bar is already carrying the brand, the
+   theme toggle and the hamburger. The promo badge and the CTA would push it past
+   the viewport, so each waits until there is room — the badge until the links
+   have settled inline, the CTA until the narrowest phones are past. Both are
+   reachable meanwhile: the CTA repeats in the hero, and Membership is in the
+   collapsed sheet.
+
+   Keyed to the library's own named container, so these track the component's
+   real collapse rather than a viewport width that only correlates with it.
+   ---------------------------------------------------------------------- */
+@container vk-navbar (width < 64rem) {
+  :where(.ip-nav-badge) {
+    display: none;
+  }
+}
+
+@container vk-navbar (width < 30rem) {
+  :where(.ip-nav-cta) {
+    display: none;
+  }
+}
+
+/* The wordmark is a link, so it is a tap target — and its line box came out at
+   23px, one pixel under the 24px WCAG 2.5.8 floor. Given a thumb rather than a
+   spec is the real audience, it gets a comfortable 44px instead of 24. */
+:where(.vk-navbar__brand) {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: 2.75rem;
+}
+
+/* The repo link keeps its slot at every width; only its word folds away, and
+   the aria-label carries the name once it does. */
+:where(.ip-nav-repo) {
+  gap: var(--vk-space-2);
+}
+
+@container vk-navbar (width < 48rem) {
+  :where(.ip-nav-repo__text) {
+    /* Not `display: none` on the button itself — the icon stays, so the repo is
+       never more than one tap away on a phone. */
+    display: none;
+  }
+}
+
+/* --- Narrow-viewport containment ---------------------------------------
+   Two things widen a page at 320–390px if left alone. Both are fixed here
+   rather than in the markup, because both are about a box, not about content.
+   ---------------------------------------------------------------------- */
+
+/* 1. The charts' visually-hidden data table.
+   The library clips it correctly for sighted users — 1px box, clip-path,
+   overflow hidden — but a <table> treats `inline-size: 1px` as a *minimum* and
+   still lays out at its intrinsic content width regardless. Absolutely
+   positioned, that ~340px box extends past a narrow viewport and the whole page
+   scrolls sideways below about 390px.
+
+   Switching it to `position: fixed` is the one fix that costs nothing: a
+   fixed-position box is not part of the document's scrollable overflow, so the
+   page stops widening, while the element remains a real `<table>` with every
+   row and cell intact in the accessibility tree. `display: block` would also
+   collapse the box, but it would strip the table semantics that are the entire
+   reason this element exists — and clipping the chart instead would eventually
+   swallow a tooltip. It stays clipped to nothing visually either way. */
+:where(.vk-chart__table) {
+  position: fixed;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+}
+
+/* 2. Inline code.
+   `Code` is `white-space: nowrap` by design, which is right for a short token
+   and wrong for a 40-character import path on a 320px screen. Long tokens wrap
+   at any character instead — for a path or a package name that reads fine, and
+   it beats both a clipped line and a sideways-scrolling page. Block code is
+   left alone: its `pre` already scrolls, and a wrapped shell command is worse
+   to read than a scrolled one. */
+:where(:not(pre) > .vk-code) {
+  max-width: 100%;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+/* --- Display type -------------------------------------------------------- */
+:where(.ip-display) {
+  font-family: var(--ip-display);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  line-height: 0.94;
+  text-wrap: balance;
+}
+
+/* The display face runs at line-height .94, which reads well but also collapses
+   the gap to the paragraph beneath a section heading. Restore it once here
+   rather than per instance. Card headings (level 3+) already get their spacing
+   from Card.Header's flex gap, and the hero manages its own via Stack. */
+:where(.ip-display):is(h1, h2):not(.ip-hero__title) {
+  margin-block-end: var(--vk-space-3);
+}
+
+:where(.ip-eyebrow) {
+  font-family: var(--ip-display);
+  font-size: var(--vk-text-sm);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--vk-color-primary);
+  margin: 0;
+}
+
+:where(.ip-lede) {
+  max-width: 56ch;
+  color: var(--vk-color-fg-subtle);
+  font-size: var(--vk-text-lg);
+}
+
+/* --- SIGNATURE: the rep marker -------------------------------------------
+   Sections are numbered the way sets are numbered. The numeral is oversized
+   and outlined so it reads as a mark on the wall rather than a heading, and it
+   is aria-hidden: "01" adds nothing for a screen reader, the words do.
+   ------------------------------------------------------------------------- */
+:where(.ip-rep) {
+  display: flex;
+  align-items: baseline;
+  gap: var(--vk-space-4);
+  margin-block-end: var(--vk-space-8);
+}
+
+:where(.ip-rep__num) {
+  flex: none;
+  font-family: var(--ip-display);
+  font-size: clamp(3.25rem, 11vw, 7rem);
+  font-weight: 700;
+  line-height: 0.76;
+  letter-spacing: -0.03em;
+  /* Fallback fill first, for engines with no text-stroke support: a very
+     low-contrast numeral rather than an invisible one. */
+  color: var(--ip-rep-stroke);
+}
+
+@supports (-webkit-text-stroke: 1px black) {
+  :where(.ip-rep__num) {
+    color: transparent;
+    -webkit-text-stroke: 2px var(--ip-rep-stroke);
+  }
+}
+
+:where(.ip-rep__words) {
+  display: flex;
+  flex-direction: column;
+  gap: var(--vk-space-2);
+  min-width: 0;
+}
+
+:where(.ip-rep__label) {
+  font-family: var(--ip-display);
+  font-size: clamp(1.5rem, 4.5vw, 2.5rem);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  margin: 0;
+}
+
+:where(.ip-rep__label) :where(em) {
+  font-style: normal;
+  color: var(--vk-color-primary);
+}
+
+:where(.ip-rep__note) {
+  margin: 0;
+  color: var(--vk-color-muted);
+  font-size: var(--vk-text-sm);
+  max-width: 52ch;
+}
+
+/* --- Hero ---------------------------------------------------------------- */
+:where(.ip-hero) {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  align-items: end;
+  min-height: min(88svh, 44rem);
+  overflow: clip;
+  border-block-end: 1px solid var(--vk-color-border);
+}
+
+:where(.ip-hero__media) {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+}
+
+:where(.ip-hero__media) :where(img) {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 32%;
+  /* The photo is scenery behind white type, not the subject. Knocking the
+     colour back is what keeps the headline at AA without a solid black box. */
+  filter: grayscale(0.55) contrast(1.08) brightness(0.7);
+}
+
+:where(.ip-hero__scrim) {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--ip-scrim);
+}
+
+:where(.ip-hero__inner) {
+  padding-block: var(--vk-space-20) var(--vk-space-12);
+  color: #fff;
+
+  /* The hero is light-on-dark in BOTH themes, because it sits on a photograph.
+     Re-pointing the tokens here — rather than restyling each child — is what
+     keeps the outline button, the badge and the muted copy legible in light
+     mode without a single extra prop. Same trick Section background="primary"
+     uses internally. */
+  --vk-color-fg: #fff;
+  --vk-color-fg-subtle: #eaeaef;
+  --vk-color-muted: #bcbcc6;
+  --vk-color-border: #ffffff45;
+  --vk-color-border-strong: #ffffff7a;
+  --vk-color-surface: #ffffff17;
+  --vk-color-surface-hover: #ffffff26;
+  --vk-color-surface-active: #ffffff33;
+}
+
+:where(.ip-hero__title) {
+  font-size: clamp(3rem, 12vw, 7.5rem);
+  margin: 0;
+  color: #fff;
+}
+
+:where(.ip-hero__title) :where(span) {
+  display: block;
+  color: var(--vk-color-primary);
+}
+
+:where(.ip-hero__copy) {
+  max-width: 48ch;
+  color: #e9e9ee;
+  font-size: var(--vk-text-lg);
+}
+
+:where(.ip-hero__countdown) {
+  padding: var(--vk-space-4) var(--vk-space-5);
+  border: 1px solid #ffffff2e;
+  border-radius: var(--ip-radius);
+  background: #0a0a0b99;
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  display: inline-flex;
+  flex-direction: column;
+  gap: var(--vk-space-2);
+  color: #fff;
+}
+
+:where(.ip-hero__countdown-label) {
+  font-family: var(--ip-display);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: var(--vk-text-xs);
+  color: #d2d2da;
+  margin: 0;
+}
+
+/* --- Marker strip: the three-word promise under the hero ------------------ */
+:where(.ip-strip) {
+  display: grid;
+  gap: 1px;
+  background: var(--vk-color-border);
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  border-block-end: 1px solid var(--vk-color-border);
+}
+
+:where(.ip-strip__cell) {
+  background: var(--vk-color-bg);
+  padding: var(--vk-space-8) var(--vk-space-6);
+  display: flex;
+  align-items: baseline;
+  gap: var(--vk-space-4);
+}
+
+:where(.ip-strip__num) {
+  flex: none;
+  font-family: var(--ip-display);
+  font-size: clamp(2.5rem, 7vw, 3.75rem);
+  font-weight: 700;
+  line-height: 0.8;
+  color: var(--ip-rep-stroke);
+}
+
+@supports (-webkit-text-stroke: 1px black) {
+  :where(.ip-strip__num) {
+    color: transparent;
+    -webkit-text-stroke: 1.5px var(--ip-rep-stroke);
+  }
+}
+
+:where(.ip-strip__word) {
+  font-family: var(--ip-display);
+  font-size: var(--vk-text-xl);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: 0 0 var(--vk-space-1);
+}
+
+:where(.ip-strip__note) {
+  margin: 0;
+  color: var(--vk-color-muted);
+  font-size: var(--vk-text-sm);
+}
+
+/* --- Occupancy / hours panel --------------------------------------------- */
+:where(.ip-panel) {
+  display: grid;
+  gap: var(--vk-space-6);
+  grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+  align-items: start;
+}
+
+:where(.ip-hours) {
+  margin: 0;
+  display: grid;
+  gap: var(--vk-space-2);
+}
+
+:where(.ip-hours) :where(div) {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--vk-space-4);
+  padding-block-end: var(--vk-space-2);
+  border-block-end: 1px dashed var(--vk-color-border);
+}
+
+:where(.ip-hours) :where(dt) {
+  color: var(--vk-color-fg-subtle);
+}
+
+:where(.ip-hours) :where(dd) {
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+  font-weight: var(--vk-weight-medium);
+}
+
+/* Sparkline defaults to a 7rem inline chip — right for a table cell, far too
+   small for a panel. `--vk-sparkline-width` is public API. */
+:where(.ip-sparkline-wide) {
+  --vk-sparkline-width: 100%;
+  display: block;
+}
+
+:where(.ip-clock) {
+  display: block;
+  margin-block-start: var(--vk-space-1);
+  font-family: var(--ip-display);
+  font-size: var(--vk-text-2xl);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+  line-height: 1.1;
+}
+
+/* --- Timetable ----------------------------------------------------------
+   Each slot carries three lines — class, coach, intensity — and the library's
+   2.25rem lane is sized for one. `--vk-scheduler-lane-height` is public API,
+   so the row grows to fit rather than clipping the content.
+   ---------------------------------------------------------------------- */
+:where(.ip-timetable) :where(.vk-scheduler) {
+  --vk-scheduler-lane-height: 4.5rem;
+  --vk-scheduler-gutter: 7.5rem;
+}
+
+:where(.ip-slot) {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  gap: 3px;
+  padding-block: 2px;
+  text-align: start;
+  min-width: 0;
+  max-width: 100%;
+}
+
+:where(.ip-slot__name) {
+  font-family: var(--ip-display);
+  font-size: var(--vk-text-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: 600;
+  line-height: 1.1;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+:where(.ip-slot__meta) {
+  /* No opacity here on purpose. Fading this text put the warning-toned slots at
+     4.25:1 against their own tinted background, which is a WCAG AA failure.
+     Hierarchy comes from size and weight instead. */
+  font-size: var(--vk-text-xs);
+  line-height: 1.2;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+:where(.ip-legend) {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--vk-space-3);
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* --- Media cards -------------------------------------------------------- */
+:where(.ip-media) {
+  position: relative;
+  overflow: clip;
+  border-radius: var(--ip-radius);
+  background: var(--vk-color-surface-subtle);
+  line-height: 0;
+}
+
+:where(.ip-media) :where(img) {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+:where(.ip-media--class) {
+  aspect-ratio: 16 / 10;
+}
+
+:where(.ip-media--trainer) {
+  aspect-ratio: 4 / 5;
+}
+
+:where(.ip-media--trainer) :where(img) {
+  object-position: 50% 20%;
+  filter: grayscale(0.4);
+  transition: filter var(--vk-duration) var(--vk-ease);
+}
+
+:where(.ip-trainer):hover :where(.ip-media--trainer) :where(img) {
+  filter: grayscale(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :where(.ip-media--trainer) :where(img) {
+    transition: none;
+  }
+}
+
+/* --- Before / after ----------------------------------------------------- */
+:where(.ip-transform) {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  border-radius: var(--ip-radius);
+  overflow: clip;
+  background: var(--vk-color-border);
+}
+
+:where(.ip-transform__half) {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  line-height: 0;
+}
+
+:where(.ip-transform__half) :where(img) {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(0.55);
+}
+
+:where(.ip-transform__half[data-when="after"]) :where(img) {
+  filter: grayscale(0);
+}
+
+:where(.ip-transform__tag) {
+  position: absolute;
+  inset-block-start: var(--vk-space-2);
+  inset-inline-start: var(--vk-space-2);
+  padding: 2px var(--vk-space-2);
+  border-radius: var(--vk-radius-xs);
+  background: #0a0a0bdb;
+  color: #fff;
+  font-family: var(--ip-display);
+  font-size: var(--vk-text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  line-height: 1.7;
+}
+
+/* --- Charts block ------------------------------------------------------- */
+:where(.ip-chartgrid) {
+  display: grid;
+  gap: var(--vk-space-6);
+  grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+  align-items: start;
+}
+
+@media (width < 62rem) {
+  :where(.ip-chartgrid) {
+    grid-template-columns: 1fr;
+  }
+}
+
+:where(.ip-ringrow) {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--vk-space-5);
+  align-items: center;
+}
+
+:where(.ip-ring-centre) {
+  display: grid;
+  place-items: center;
+  line-height: 1.05;
+  text-align: center;
+}
+
+:where(.ip-ring-centre) :where(strong) {
+  font-family: var(--ip-display);
+  font-size: var(--vk-text-2xl);
+}
+
+:where(.ip-ring-centre) :where(span) {
+  font-size: var(--vk-text-xs);
+  color: var(--vk-color-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* --- BMI --------------------------------------------------------------- */
+:where(.ip-bmi__readout) {
+  display: flex;
+  align-items: baseline;
+  gap: var(--vk-space-3);
+  flex-wrap: wrap;
+}
+
+:where(.ip-bmi__value) {
+  font-family: var(--ip-display);
+  font-size: clamp(2.75rem, 9vw, 4rem);
+  font-weight: 700;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  color: var(--vk-color-primary);
+}
+
+/* --- Plan picker ------------------------------------------------------
+   The radios ARE the cards. `vk-` class names are public API, so dressing
+   the library's own radio row is supported — and it keeps the group a real
+   fieldset with one shared name, which is what makes arrow keys work.
+   ---------------------------------------------------------------------- */
+:where(.ip-plans) :where(.vk-radio-group__items) {
+  display: grid;
+  gap: var(--vk-space-3);
+}
+
+:where(.ip-plans) :where(.vk-radio) {
+  align-items: start;
+  padding: var(--vk-space-4);
+  border: 1px solid var(--vk-color-border);
+  border-radius: var(--ip-radius);
+  background: var(--vk-color-surface);
+  transition: border-color var(--vk-duration-fast) var(--vk-ease);
+}
+
+:where(.ip-plans) :where(.vk-radio):hover {
+  border-color: var(--vk-color-border-strong);
+}
+
+:where(.ip-plans) :where(.vk-radio):has(:checked) {
+  border-color: var(--vk-color-primary);
+  background: var(--vk-color-primary-subtle);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :where(.ip-plans) :where(.vk-radio) {
+    transition: none;
+  }
+}
+
+:where(.ip-plan-row) {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--vk-space-3);
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+:where(.ip-plan-price) {
+  font-family: var(--ip-display);
+  font-size: var(--vk-text-xl);
+  white-space: nowrap;
+}
+
+:where(.ip-form-grid) {
+  display: grid;
+  gap: var(--vk-space-5);
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+}
+
+/* --- Clone band -------------------------------------------------------- */
+:where(.ip-clone) {
+  display: grid;
+  gap: var(--vk-space-8);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  align-items: center;
+}
+
+@media (width < 60rem) {
+  :where(.ip-clone) {
+    grid-template-columns: 1fr;
+  }
+}
+
+:where(.ip-clone__box) {
+  display: grid;
+  gap: var(--vk-space-4);
+  padding: var(--vk-space-5);
+  border: 1px solid var(--vk-color-border);
+  border-radius: var(--ip-radius);
+  background: var(--vk-color-bg);
+  min-width: 0;
+}
+
+:where(.ip-clone__cmd) {
+  display: flex;
+  align-items: center;
+  gap: var(--vk-space-2);
+  min-width: 0;
+}
+
+/* The command is long and must never widen the page — so it wraps.
+   `Code block` ships an `overflow-x: auto` pre, but a scrollable box has to be
+   keyboard-focusable to be reachable at all (WCAG 2.1.1, and axe's
+   scrollable-region-focusable rule). Letting a clone command run to a second
+   line is better than either adding a tab stop nobody wants or hiding half of
+   it behind a scrollbar — and the copy button beside it means nobody is
+   selecting the text by hand anyway. */
+:where(.ip-clone__cmd) :where(pre) {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  overflow-x: visible;
+}
+
+:where(.ip-clone__cmd) :where(.vk-code__inner) {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+/* On a phone the button beside the command squeezes it into four wrapped lines.
+   Stacking gives the command the full width and the button a full-width hit
+   area, which is the better shape on touch anyway. */
+@media (width < 30rem) {
+  :where(.ip-clone__cmd) {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  :where(.ip-clone__cmd) :where(.vk-copy-button),
+  :where(.ip-clone__cmd) :where(button) {
+    width: 100%;
+  }
+}
+
+:where(.ip-clone__actions) {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--vk-space-2);
+}
+
+:where(.ip-clone__actions) :where(a) {
+  gap: var(--vk-space-2);
+}
+
+/* --- Footer credit ----------------------------------------------------- */
+:where(.ip-credit) {
+  display: grid;
+  gap: var(--vk-space-3);
+  padding: var(--vk-space-5);
+  border: 1px solid var(--vk-color-border);
+  border-radius: var(--ip-radius);
+  background: var(--vk-color-surface-subtle);
+}
+
+:where(.ip-credit__install) {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--vk-space-2);
+}
+
+/* --- Small helpers ---------------------------------------------------- */
+:where(.ip-tabular) {
+  font-variant-numeric: tabular-nums;
+}
+
+:where(.ip-plain) {
+  color: inherit;
+  text-decoration: none;
+}
+
+:where(.ip-plain):hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+:where(.ip-anchor) {
+  /* Anchored cards clear the sticky navbar when deep-linked. */
+  scroll-margin-block-start: 6rem;
+}
+
+/* A focus ring that survives being drawn over a photograph. */
+:where(a, button, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--vk-color-ring);
+  outline-offset: 2px;
+  border-radius: var(--vk-radius-xs);
 }

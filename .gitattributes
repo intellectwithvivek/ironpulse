@@ -1,0 +1,19 @@
+# Normalise line endings: LF in the repository, native in the working tree.
+# Without this, a contributor on Windows and one on macOS produce diffs that
+# differ on every line of a file neither of them meaningfully changed.
+* text=auto eol=lf
+
+# Binary assets — never touch these.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.avif binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+
+# Generated. Collapsed in pull-request diffs.
+package-lock.json linguist-generated=true -diff
+docs/*.png linguist-documentation=true

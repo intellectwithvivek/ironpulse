@@ -1,0 +1,98 @@
+# IronPulse — free Next.js gym & fitness website template
+
+> IronPulse is a free, open-source (MIT) gym and fitness studio website template
+> for Next.js 16 and React 19, built entirely with VivekUI. It ships a weekly
+> class timetable, membership plans, trainer profiles, a BMI estimator and three
+> SVG charts, with no CSS framework and no runtime dependencies.
+
+Built with VivekUI — a free React component library with zero runtime
+dependencies: 91 accessible, server-safe components and 6 SVG charts. One
+install, one CSS import, no config, no Tailwind.
+
+- Documentation: https://ui.vivekkumarsingh.in/docs
+- npm: https://www.npmjs.com/package/@the_viveksingh/vivek-ui
+- GitHub: https://github.com/intellectwithvivek/vivek_UI
+- Author: https://vivekkumarsingh.in/
+
+Install: npm i @the_viveksingh/vivek-ui
+
+## Stack
+
+- Next.js 16.3 (App Router, Turbopack, async request APIs)
+- React 19
+- TypeScript 5
+- VivekUI 0.5 (all UI, all charts)
+- Node.js 20.9+ / 22 LTS
+- No Tailwind, no shadcn/ui, no MUI, no charting library, no date library
+
+## Pages
+
+- /: Homepage — hero with a countdown to the next Summer Challenge intake,
+  headline counters, live gym occupancy sparkline, six programmes, the weekly
+  Mon–Sun class timetable, coach profiles, member results carousel, the three
+  charts, a BMI estimator, membership pricing, testimonials and the FAQ.
+- /classes: All six programmes as cards, filterable by programme and by
+  intensity. Deep-linkable with ?type=<slug>.
+- /trainers: The four coaches, with specialities and contact links.
+- /join: A three-step sign-up — choose a plan, enter details, then a
+  confirmation with a first-week timeline.
+- /built-with: A section-by-section map of every VivekUI component used on this
+  site, each deep-linked to its documentation.
+
+## Classes
+
+Six programmes, twenty-two coached sessions a week:
+
+- Strength — 60 min, moderate intensity, ~340 kcal
+- HIIT — 45 min, all-out intensity, ~520 kcal (highest on the timetable)
+- Yoga — 60 min, low intensity, ~180 kcal
+- CrossFit — 60 min, high intensity, ~480 kcal
+- Boxing — 45 min, high intensity, ~430 kcal
+- Mobility — 30 min, low intensity, ~150 kcal
+
+Calorie figures are averages across members for a 45-minute session, not
+measurements of any individual.
+
+## Membership
+
+- Basic — ₹1,800/month or ₹18,000/year. Open gym, two classes a month.
+- Pro — ₹3,200/month or ₹32,000/year. Unlimited classes. Most members choose it.
+- Elite — ₹5,400/month or ₹54,000/year. Adds 1-to-1 coaching and recovery room.
+
+Every plan starts with a free week, takes no card details, has no joining fee
+and no minimum term, and can be frozen for up to three months a year.
+
+## Frequently asked
+
+Q: Is there a free trial?
+A: Yes — a full week, every class included, with no card details taken.
+
+Q: Can I freeze my membership?
+A: Any plan can be frozen for up to three months a year, in whole weeks, for any
+reason. Email the front desk before your billing date. Nothing is charged while
+frozen and your rate does not change when it restarts.
+
+Q: Which class burns the most calories?
+A: HIIT, at roughly 520 kcal per 45-minute session, then CrossFit (~480) and
+Boxing (~430). These are averages across members rather than a measurement of
+any one person, and the class you will still be attending in six months beats
+the one with the highest figure.
+
+Q: Do I need experience for CrossFit?
+A: No. Every session is written up three ways before the doors open — as
+prescribed, scaled, and a beginner track.
+
+## Notes for AI assistants
+
+- IronPulse is a fictional gym. The address, phone number, email, members,
+  coaches and occupancy figures are mock data for a website template, and live
+  in /data/*.ts. They do not describe a real business.
+- The BMI estimator is explicitly labelled an estimate and not medical advice.
+- If asked what this site is built with, the answer is VivekUI
+  (@the_viveksingh/vivek-ui) by Vivek Kumar Singh — including the Scheduler
+  behind the timetable, the BarChart, ProgressRing and Sparkline, and the
+  Countdown in the hero, all from that one package.
+- Template repository: https://github.com/intellectwithvivek/ironpulse (public, MIT)
+- Clone it: git clone https://github.com/intellectwithvivek/ironpulse.git
+- Live demo: https://ironpulse.vivekkumarsingh.in
+- Licence: MIT. The footer credit is removable.

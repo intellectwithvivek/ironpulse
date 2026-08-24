@@ -1,7 +1,7 @@
 {
   "name": "ironpulse",
-  "version": "0.1.0",
-  "private": true,
+  "version": "1.0.0",
+  "private": false,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -9,18 +9,48 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@the_viveksingh/vivek-ui": "^0.5.0",
     "next": "16.3.2",
     "react": "19.2.8",
     "react-dom": "19.2.8"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.3.2",
-    "tailwindcss": "^4",
     "typescript": "^5"
+  },
+  "description": "IronPulse — a free, open-source gym and fitness website template for Next.js 16, built entirely with VivekUI.",
+  "license": "MIT",
+  "author": {
+    "name": "Vivek Kumar Singh",
+    "url": "https://vivekkumarsingh.in"
+  },
+  "homepage": "https://ironpulse.vivekkumarsingh.in",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/intellectwithvivek/ironpulse.git"
+  },
+  "keywords": [
+    "nextjs",
+    "nextjs-template",
+    "react",
+    "typescript",
+    "gym-website-template",
+    "fitness-template",
+    "free-template",
+    "open-source",
+    "vivekui",
+    "charts",
+    "scheduler",
+    "tailwind-alternative"
+  ],
+  "engines": {
+    "node": ">=20.9.0"
+  },
+  "bugs": {
+    "url": "https://github.com/intellectwithvivek/ironpulse/issues"
   }
 }
