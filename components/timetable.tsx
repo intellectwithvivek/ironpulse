@@ -39,7 +39,7 @@ export function Timetable() {
         step={60}
         minTickWidth={150}
         formatTime={formatTime}
-        onEventSelect={handleSelect}
+        onSelect={handleSelect}
         renderEvent={(event) => {
           const meta = event.meta as SlotMeta
           return (

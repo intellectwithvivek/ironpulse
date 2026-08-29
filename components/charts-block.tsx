@@ -49,7 +49,7 @@ export function ChartsBlock() {
             <div className="ip-ringrow">
               <ProgressRing
                 value={WEEKLY_GOAL_PERCENT}
-                size={132}
+                diameter={132}
                 thickness={12}
                 showValue
                 label="Members hitting their weekly goal"
@@ -76,7 +76,7 @@ export function ChartsBlock() {
               <ProgressRing
                 value={workoutsDone}
                 max={workoutsTarget}
-                size={132}
+                diameter={132}
                 thickness={12}
                 label={`${workoutsDone} of ${workoutsTarget} workouts this week`}
                 title={`${workoutsDone} of ${workoutsTarget} workouts this week`}
