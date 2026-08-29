@@ -47,7 +47,7 @@ function countFor(day: number): string {
   return n === 1 ? '1 class' : `${n} classes`
 }
 
-/** What `onEventSelect` gets back, so the click can route without a lookup. */
+/** What `onSelect` gets back, so the click can route without a lookup. */
 export interface SlotMeta {
   classSlug: string
   className: string

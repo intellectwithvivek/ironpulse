@@ -129,7 +129,7 @@ export function JoinFlow({ initialPlan = 'pro' }: { initialPlan?: string }) {
               name="plan"
               label="Membership plan"
               value={plan}
-              onChange={setPlan}
+              onValueChange={setPlan}
               options={PLANS.map((option) => ({
                 value: option.id,
                 label: (
